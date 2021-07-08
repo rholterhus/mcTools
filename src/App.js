@@ -70,7 +70,7 @@ function App() {
   }
 
   async function launchNewInstance() {
-    if(Object.keys(instances).length == 0) {
+    if (Object.keys(instances).length == 0) {
       const data = await makeRequest('start-mc', {});
     }
   }
