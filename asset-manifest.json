@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/mcTools/static/css/main.ed17c835.chunk.css",
+    "main.js": "/mcTools/static/js/main.c5e94898.chunk.js",
+    "main.js.map": "/mcTools/static/js/main.c5e94898.chunk.js.map",
+    "runtime-main.js": "/mcTools/static/js/runtime-main.2087e848.js",
+    "runtime-main.js.map": "/mcTools/static/js/runtime-main.2087e848.js.map",
+    "static/js/2.11b8de82.chunk.js": "/mcTools/static/js/2.11b8de82.chunk.js",
+    "static/js/2.11b8de82.chunk.js.map": "/mcTools/static/js/2.11b8de82.chunk.js.map",
+    "static/js/3.0af66f95.chunk.js": "/mcTools/static/js/3.0af66f95.chunk.js",
+    "static/js/3.0af66f95.chunk.js.map": "/mcTools/static/js/3.0af66f95.chunk.js.map",
+    "index.html": "/mcTools/index.html",
+    "static/css/main.ed17c835.chunk.css.map": "/mcTools/static/css/main.ed17c835.chunk.css.map",
+    "static/js/2.11b8de82.chunk.js.LICENSE.txt": "/mcTools/static/js/2.11b8de82.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.2087e848.js",
+    "static/js/2.11b8de82.chunk.js",
+    "static/css/main.ed17c835.chunk.css",
+    "static/js/main.c5e94898.chunk.js"
+  ]
+}
