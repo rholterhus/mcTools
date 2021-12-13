@@ -88,7 +88,7 @@ function App() {
 
   const [secretKey, setSecretKey] = useState('');
   const [optionsModalOpen, setOptionsModalOpen] = useState(false);
-  const [instances, setInstances] = useState('hello');
+  const [instances, setInstances] = useState('');
   const [instanceType, setInstanceType] = useState('t2.large');
   const [instanceLocation, setInstanceLocation] = useState('us-east-2');
 
@@ -100,8 +100,6 @@ function App() {
         body: JSON.stringify({ 
           accessKeyId: 'AKIA4HDL62RVEJ4ZNRSW', 
           secretAccessKey: secretKey, 
-          instanceType: instanceType,
-          instanceLocation: instanceLocation,
           ...data
         })
     };
@@ -116,7 +114,10 @@ function App() {
 
   async function launchNewInstance() {
     if (Object.keys(instances).length == 0) {
-      const data = await makeRequest('start-mc', {});
+      const data = await makeRequest('start-mc', {
+        instanceType: instanceType,
+        instanceLocation: instanceLocation,
+      });
     }
   }
 
