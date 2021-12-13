@@ -5,6 +5,11 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
+import FormControl from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import Modal from '@material-ui/core/Modal';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
@@ -21,6 +26,37 @@ const useStyles = makeStyles((theme) => ({
     height: '75px',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  middleRow: {
+    display: 'flex',
+    height: '75px',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modalMain: {
+    backgroundColor: 'rgb(0,0,0,0.25)',
+    display: 'flex',
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    pointerEvents: 'none', // so modal click close works
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    display: 'flex',
+    height: '250px',
+    width: '250px',
+    justifyContent: 'center',
+    alignItems: 'center',
+    pointerEvents: 'auto', // so modal click close works
+    flexDirection: 'column'
+  },
+  horizontalLine: {
+    height: '1px',
+    width: '100%',
+    backgroundColor: 'black',
+    margin: '20px 20px 20px 20px'
   },
   input: {
     margin: theme.spacing(1),
@@ -50,23 +86,32 @@ function App() {
 
   const classes = useStyles();
 
-  const [accessKey, setAccessKey] = useState('');
   const [secretKey, setSecretKey] = useState('');
-  const [instances, setInstances] = useState('');
+  const [optionsModalOpen, setOptionsModalOpen] = useState(false);
+  const [instances, setInstances] = useState('hello');
+  const [instanceType, setInstanceType] = useState('t2.large');
+  const [instanceLocation, setInstanceLocation] = useState('us-east-2');
+
 
   async function makeRequest(endpoint, data) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accessKeyId: accessKey, secretAccessKey: secretKey, ...data})
+        body: JSON.stringify({ 
+          accessKeyId: 'AKIA4HDL62RVEJ4ZNRSW', 
+          secretAccessKey: secretKey, 
+          instanceType: instanceType,
+          instanceLocation: instanceLocation,
+          ...data
+        })
     };
     const response = await fetch(`https://minecraftbackend.herokuapp.com/${endpoint}`, requestOptions);
-    return response.json();
+    return response
   }
 
   async function getCurrentInfo() {
     const data = await makeRequest('instances', {});
-    setInstances(data);
+    setInstances(data.json());
   }
 
   async function launchNewInstance() {
@@ -90,17 +135,6 @@ function App() {
           size='small'
           className={classes.input}
           id="outlined-basic" 
-          label="AccessKey" 
-          variant="outlined" 
-          InputLabelProps={{
-              shrink: true,
-          }}
-          onChange={e => setAccessKey(e.target.value)}
-        />
-        <TextField 
-          size='small'
-          className={classes.input}
-          id="outlined-basic" 
           label="SecretKey" 
           variant="outlined" 
           InputLabelProps={{
@@ -108,11 +142,44 @@ function App() {
           }}
           onChange={e => setSecretKey(e.target.value)}
         />
-        <Button size='small' className={classes.button} onClick={() => getCurrentInfo()}>Get/Refresh</Button> 
       </div>
+      <Button size='small' className={classes.button} onClick={() => getCurrentInfo()}>Get/Refresh</Button> 
       {instances ? 
-      <>
-        {Object.keys(instances).length === 0 ? <Button size='small' className={classes.button} onClick={() => launchNewInstance()}>Launch New Instance</Button> : null}
+      <>	
+        {Object.keys(instances).length === 0 ? 
+          <div className={classes.middleRow}> 
+            <Button size='small' className={classes.button} onClick={() => setOptionsModalOpen(true)}>Instance Options</Button>
+            <Button size='small' className={classes.button} onClick={() => launchNewInstance()}>Launch New Instance</Button> 
+            <Modal
+              keepMounted
+              open={optionsModalOpen}
+              onClose={() => setOptionsModalOpen(false)}
+            >
+              <div className={classes.modalMain}>
+                <div className={classes.modalContent}>
+                  <strong>Instance Type</strong>
+                  <FormControl>
+                    <Select value={instanceType} onChange={(e) => setInstanceType(e.target.value)}>
+                      <MenuItem value={"t2.xlarge"}>t2.xlarge (16 GB RAM)</MenuItem>
+                      <MenuItem value={"t2.large"}>t2.large (8 GB RAM)</MenuItem>
+                      <MenuItem value={"t2.medium"}>t2.medium (4 GB RAM)</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <div className={classes.horizontalLine}/>
+                  <strong>Instance Location</strong>
+                  <FormControl>
+                    <Select value={instanceLocation} onChange={(e) => setInstanceLocation(e.target.value)}>
+                      <MenuItem value={"us-east-2"}>Ohio</MenuItem>
+                      <MenuItem value={"eu-west-3"}>Paris</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+              </div>
+            </Modal>
+          </div> 
+          : 
+          null
+        }
         <div className={classes.info}>
           <TableContainer className={classes.tableContainer} component={Paper}>
             <Table >
