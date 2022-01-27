@@ -100,6 +100,7 @@ function App() {
         body: JSON.stringify({ 
           accessKeyId: 'AKIA4HDL62RVEJ4ZNRSW', 
           secretAccessKey: secretKey, 
+	        instanceLocation: instanceLocation,
           ...data
         })
     };
@@ -109,14 +110,13 @@ function App() {
 
   async function getCurrentInfo() {
     const data = await makeRequest('instances', {});
-    setInstances(data.json());
+    setInstances(await data.json());
   }
 
   async function launchNewInstance() {
     if (Object.keys(instances).length == 0) {
       const data = await makeRequest('start-mc', {
         instanceType: instanceType,
-        instanceLocation: instanceLocation,
       });
     }
   }
